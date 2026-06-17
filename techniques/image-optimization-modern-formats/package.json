@@ -1,0 +1,29 @@
+{
+  "name": "image-optimization-toolkit",
+  "version": "1.0.0",
+  "description": "Tools untuk convert images ke WebP dan AVIF",
+  "main": "convert-images.js",
+  "scripts": {
+    "convert": "node convert-images.js",
+    "convert:dir": "node convert-images.js",
+    "demo": "npx serve . -p 3000"
+  },
+  "keywords": [
+    "image-optimization",
+    "webp",
+    "avif",
+    "performance",
+    "web-vitals"
+  ],
+  "author": "Hermes Agent",
+  "license": "MIT",
+  "dependencies": {
+    "sharp": "^0.33.3"
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
