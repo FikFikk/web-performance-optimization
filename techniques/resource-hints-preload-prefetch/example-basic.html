@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Resource Hints: Basic Implementation -->
+  
+  <!-- 1. Preconnect ke third-party domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- 2. Preload critical font -->
+  <link rel="preload" href="/fonts/inter-var.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <!-- 3. Preload hero image (LCP candidate) -->
+  <link rel="preload" href="/images/hero.jpg" as="image">
+  
+  <!-- 4. Preload critical CSS -->
+  <link rel="preload" href="/css/critical.css" as="style">
+  <link rel="stylesheet" href="/css/critical.css">
+  
+  <!-- 5. DNS prefetch untuk analytics (lower priority) -->
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
+  
+  <title>Resource Hints - Basic Example</title>
+  
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .hero {
+      width: 100%;
+      height: 500px;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    .content {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.6;
+    }
+    
+    .metrics {
+      background: #f0f0f0;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+    
+    .metrics h2 {
+      margin-top: 0;
+    }
+    
+    .metric-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .metric-item:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero section with preloaded image -->
+  <div class="hero" style="background-image: url('/images/hero.jpg')">
+    <h1>Resource Hints Demo</h1>
+  </div>
+  
+  <div class="content">
+    <h2>Resource Hints Implementation</h2>
+    <p>
+      Halaman ini menggunakan resource hints untuk mengoptimalkan loading performance:
+    </p>
+    
+    <ul>
+      <li><strong>Preconnect</strong> ke Google Fonts CDN</li>
+      <li><strong>Preload</strong> critical font (Inter)</li>
+      <li><strong>Preload</strong> hero image untuk LCP</li>
+      <li><strong>DNS-prefetch</strong> untuk analytics</li>
+    </ul>
+    
+    <div class="metrics">
+      <h2>Performance Metrics</h2>
+      <div id="metrics-container">
+        <p>Loading metrics...</p>
+      </div>
+    </div>
+    
+    <h3>Buka Chrome DevTools</h3>
+    <ol>
+      <li>Buka DevTools (F12)</li>
+      <li>Tab Network</li>
+      <li>Filter by "Priority"</li>
+      <li>Perhatikan resources dengan priority "High" dimuat lebih awal</li>
+    </ol>
+  </div>
+  
+  <script>
+    // Measure and display performance metrics
+    window.addEventListener('load', () => {
+      // Get performance entries
+      const navigation = performance.getEntriesByType('navigation')[0];
+      const resources = performance.getEntriesByType('resource');
+      
+      // Find hero image
+      const heroImage = resources.find(r => r.name.includes('hero.jpg'));
+      
+      // Find font
+      const font = resources.find(r => r.name.includes('.woff2'));
+      
+      // Display metrics
+      const metricsContainer = document.getElementById('metrics-container');
+      metricsContainer.innerHTML = `
+        <div class="metric-item">
+          <span>DNS Lookup:</span>
+          <strong>${Math.round(navigation.domainLookupEnd - navigation.domainLookupStart)}ms</strong>
+        </div>
+        <div class="metric-item">
+          <span>TCP Connection:</span>
+          <strong>${Math.round(navigation.connectEnd - navigation.connectStart)}ms</strong>
+        </div>
+        <div class="metric-item">
+          <span>DOM Content Loaded:</span>
+          <strong>${Math.round(navigation.domContentLoadedEventEnd - navigation.fetchStart)}ms</strong>
+        </div>
+        <div class="metric-item">
+          <span>Load Complete:</span>
+          <strong>${Math.round(navigation.loadEventEnd - navigation.fetchStart)}ms</strong>
+        </div>
+        ${heroImage ? `
+        <div class="metric-item">
+          <span>Hero Image Load:</span>
+          <strong>${Math.round(heroImage.responseEnd - heroImage.startTime)}ms</strong>
+        </div>
+        ` : ''}
+        ${font ? `
+        <div class="metric-item">
+          <span>Font Load:</span>
+          <strong>${Math.round(font.responseEnd - font.startTime)}ms</strong>
+        </div>
+        ` : ''}
+      `;
+      
+      // Log detailed resource timing
+      console.group('Resource Hints Performance');
+      
+      if (heroImage) {
+        console.log('Hero Image Timing:', {
+          name: heroImage.name,
+          duration: Math.round(heroImage.duration) + 'ms',
+          startTime: Math.round(heroImage.startTime) + 'ms',
+          dns: Math.round(heroImage.domainLookupEnd - heroImage.domainLookupStart) + 'ms',
+          tcp: Math.round(heroImage.connectEnd - heroImage.connectStart) + 'ms',
+          ttfb: Math.round(heroImage.responseStart - heroImage.requestStart) + 'ms'
+        });
+      }
+      
+      if (font) {
+        console.log('Font Timing:', {
+          name: font.name,
+          duration: Math.round(font.duration) + 'ms',
+          startTime: Math.round(font.startTime) + 'ms',
+          dns: Math.round(font.domainLookupEnd - font.domainLookupStart) + 'ms',
+          tcp: Math.round(font.connectEnd - font.connectStart) + 'ms',
+          ttfb: Math.round(font.responseStart - font.requestStart) + 'ms'
+        });
+      }
+      
+      console.groupEnd();
+    });
+  </script>
+</body>
+</html>

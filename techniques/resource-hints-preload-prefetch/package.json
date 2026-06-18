@@ -1,0 +1,27 @@
+{
+  "name": "resource-hints-preload-prefetch",
+  "version": "1.0.0",
+  "description": "Resource Hints implementation examples dan measurement tools untuk optimasi web performance",
+  "main": "measure-resource-hints.js",
+  "scripts": {
+    "measure": "node measure-resource-hints.js",
+    "serve": "npx serve .",
+    "test": "echo \"Open example-basic.html atau example-prefetch.html di browser\""
+  },
+  "keywords": [
+    "web-performance",
+    "resource-hints",
+    "preload",
+    "prefetch",
+    "preconnect",
+    "optimization",
+    "core-web-vitals",
+    "lcp",
+    "fcp"
+  ],
+  "author": "Hermes Agent",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

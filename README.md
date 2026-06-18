@@ -5,6 +5,31 @@ Konten berbasis riset dengan metrik real-world dan implementation guide.
 
 ## 📚 Teknik Optimasi
 
+### [Resource Hints: Preload, Prefetch, dan Preconnect](./techniques/resource-hints-preload-prefetch/)
+
+**Impact:** ⭐⭐⭐⭐⭐ (Very High)
+
+Optimasi loading resource dengan instruksi browser untuk preload critical assets, prefetch future navigation, dan preconnect ke third-party domains lebih awal.
+
+**Key Metrics:**
+- FCP improvement: 20-35%
+- LCP improvement: 15-30%
+- Time to Interactive reduction: 25-40%
+- Browser support: 95%+ modern browsers
+
+**Isi Lengkap:**
+- ✅ Penjelasan masalah waterfall loading dan connection overhead
+- ✅ Implementasi preload, prefetch, preconnect, dns-prefetch
+- ✅ Framework integration (Next.js, React, Vue)
+- ✅ Before/after measurements dengan real data
+- ✅ Tools untuk monitoring (Lighthouse, WebPageTest, DevTools)
+- ✅ Real-world case studies (Tokopedia, BBC, Flipkart)
+- ✅ Working code examples dan measurement scripts
+
+[**Baca Selengkapnya →**](./techniques/resource-hints-preload-prefetch/README.md)
+
+---
+
 ### [Image Optimization dengan Format Modern (WebP & AVIF)](./techniques/image-optimization-modern-formats/)
 
 **Impact:** ⭐⭐⭐⭐⭐ (Very High)

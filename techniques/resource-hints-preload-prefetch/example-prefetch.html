@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Prefetch Example: Loading resources untuk navigasi masa depan -->
+  
+  <!-- Prefetch halaman yang likely akan dikunjungi -->
+  <link rel="prefetch" href="product-detail.html">
+  
+  <!-- Prefetch images untuk next page -->
+  <link rel="prefetch" href="/images/product-detail.jpg">
+  
+  <title>Prefetch Example - Product Listing</title>
+  
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .product-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      transition: transform 0.2s;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .product-image {
+      width: 100%;
+      height: 200px;
+      background: #f0f0f0;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+    
+    .product-title {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+    
+    .product-price {
+      color: #e74c3c;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    
+    .view-button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+    
+    .view-button:hover {
+      background: #2980b9;
+    }
+    
+    .info-box {
+      background: #e8f4f8;
+      border-left: 4px solid #3498db;
+      padding: 1rem;
+      margin: 2rem 0;
+    }
+    
+    .prefetch-status {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      border: 2px solid #3498db;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 300px;
+    }
+    
+    .status-item {
+      display: flex;
+      align-items: center;
+      margin: 0.5rem 0;
+    }
+    
+    .status-icon {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 0.5rem;
+    }
+    
+    .status-icon.pending {
+      background: #f39c12;
+    }
+    
+    .status-icon.complete {
+      background: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <h1>Product Listing - Prefetch Demo</h1>
+  
+  <div class="info-box">
+    <strong>💡 Prefetch Demo:</strong> Halaman ini menggunakan prefetch untuk loading halaman product detail.
+    Hover pada product card untuk trigger prefetch. Ketika kamu klik "View Details", halaman akan load
+    hampir instant karena sudah di-prefetch!
+  </div>
+  
+  <div class="product-grid">
+    <div class="product-card" data-prefetch="/product-1.html">
+      <div class="product-image"></div>
+      <div class="product-title">Premium Headphones</div>
+      <div class="product-price">Rp 1.299.000</div>
+      <a href="product-detail.html?id=1" class="view-button">View Details</a>
+    </div>
+    
+    <div class="product-card" data-prefetch="/product-2.html">
+      <div class="product-image"></div>
+      <div class="product-title">Wireless Mouse</div>
+      <div class="product-price">Rp 399.000</div>
+      <a href="product-detail.html?id=2" class="view-button">View Details</a>
+    </div>
+    
+    <div class="product-card" data-prefetch="/product-3.html">
+      <div class="product-image"></div>
+      <div class="product-title">Mechanical Keyboard</div>
+      <div class="product-price">Rp 899.000</div>
+      <a href="product-detail.html?id=3" class="view-button">View Details</a>
+    </div>
+    
+    <div class="product-card" data-prefetch="/product-4.html">
+      <div class="product-image"></div>
+      <div class="product-title">USB-C Hub</div>
+      <div class="product-price">Rp 599.000</div>
+      <a href="product-detail.html?id=4" class="view-button">View Details</a>
+    </div>
+  </div>
+  
+  <!-- Prefetch status monitor -->
+  <div class="prefetch-status">
+    <strong>Prefetch Status:</strong>
+    <div id="status-list"></div>
+  </div>
+  
+  <script>
+    // Prefetch on hover (user intent signal)
+    const prefetchedUrls = new Set();
+    const statusList = document.getElementById('status-list');
+    
+    function updateStatus(url, status) {
+      const existingItem = document.querySelector(`[data-status-url="${url}"]`);
+      
+      if (existingItem) {
+        const icon = existingItem.querySelector('.status-icon');
+        icon.className = `status-icon ${status}`;
+      } else {
+        const statusItem = document.createElement('div');
+        statusItem.className = 'status-item';
+        statusItem.setAttribute('data-status-url', url);
+        statusItem.innerHTML = `
+          <div class="status-icon ${status}"></div>
+          <span>${url}</span>
+        `;
+        statusList.appendChild(statusItem);
+      }
+    }
+    
+    function prefetchPage(url) {
+      if (prefetchedUrls.has(url)) {
+        return; // Already prefetched
+      }
+      
+      console.log('Prefetching:', url);
+      updateStatus(url, 'pending');
+      
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url;
+      link.as = 'document';
+      
+      link.onload = () => {
+        console.log('Prefetch complete:', url);
+        updateStatus(url, 'complete');
+      };
+      
+      link.onerror = () => {
+        console.error('Prefetch failed:', url);
+        updateStatus(url, 'pending');
+      };
+      
+      document.head.appendChild(link);
+      prefetchedUrls.add(url);
+    }
+    
+    // Prefetch on hover (high user intent)
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        const url = card.getAttribute('data-prefetch');
+        if (url) {
+          prefetchPage(url);
+        }
+      }, { once: true }); // Only once per card
+    });
+    
+    // Advanced: Adaptive prefetching based on connection
+    if ('connection' in navigator) {
+      const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+      
+      console.log('Connection info:', {
+        effectiveType: connection.effectiveType,
+        saveData: connection.saveData,
+        downlink: connection.downlink + ' Mbps'
+      });
+      
+      // Only auto-prefetch on fast connections
+      if (connection.effectiveType === '4g' && !connection.saveData) {
+        console.log('Fast connection detected - prefetching top products');
+        
+        // Prefetch top 2 products after page load
+        window.addEventListener('load', () => {
+          setTimeout(() => {
+            const topProducts = document.querySelectorAll('.product-card');
+            topProducts.forEach((card, index) => {
+              if (index < 2) {
+                const url = card.getAttribute('data-prefetch');
+                if (url) prefetchPage(url);
+              }
+            });
+          }, 2000); // Wait 2s after load
+        });
+      } else {
+        console.log('Slow connection or data saver - prefetch only on hover');
+      }
+    }
+    
+    // Measure prefetch effectiveness
+    window.addEventListener('beforeunload', () => {
+      console.group('Prefetch Summary');
+      console.log('Total prefetched:', prefetchedUrls.size);
+      console.log('URLs:', Array.from(prefetchedUrls));
+      console.groupEnd();
+    });
+  </script>
+</body>
+</html>
