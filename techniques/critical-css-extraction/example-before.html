@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Critical CSS Demo - Before</title>
+  
+  <!-- ❌ BEFORE: Render-blocking CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <nav class="nav">
+      <div class="logo">My Site</div>
+      <ul class="nav-list">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Welcome to Our Site</h1>
+      <p>This is above-the-fold content that users see immediately.</p>
+      <button class="cta-button">Get Started</button>
+    </section>
+
+    <section class="features">
+      <h2>Our Features</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Fast</h3>
+          <p>Lightning-fast performance</p>
+        </div>
+        <div class="feature-card">
+          <h3>Reliable</h3>
+          <p>Rock-solid reliability</p>
+        </div>
+        <div class="feature-card">
+          <h3>Secure</h3>
+          <p>Enterprise-grade security</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Below-the-fold content -->
+    <section class="testimonials">
+      <h2>What Our Clients Say</h2>
+      <div class="testimonial-list">
+        <blockquote>
+          <p>"Amazing service!"</p>
+          <cite>- Happy Client</cite>
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="footer-cta">
+      <h2>Ready to Get Started?</h2>
+      <button class="cta-button">Sign Up Now</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 My Site. All rights reserved.</p>
+  </footer>
+</body>
+</html>

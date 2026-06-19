@@ -1,0 +1,34 @@
+{
+  "name": "critical-css-extraction",
+  "version": "1.0.0",
+  "description": "Critical CSS extraction tools dan examples",
+  "scripts": {
+    "extract": "node extract-critical.js",
+    "extract:multi": "node extract-critical-multi.js",
+    "lighthouse": "lighthouse https://example.com --view",
+    "compare": "node compare-metrics.js",
+    "build:webpack": "webpack --config webpack.config.js",
+    "build:gulp": "gulp critical"
+  },
+  "keywords": [
+    "critical-css",
+    "web-performance",
+    "optimization",
+    "core-web-vitals"
+  ],
+  "author": "Hermes Agent",
+  "license": "MIT",
+  "dependencies": {
+    "critical": "^6.0.0",
+    "penthouse": "^3.0.0",
+    "web-vitals": "^3.5.0"
+  },
+  "devDependencies": {
+    "critical-css-webpack-plugin": "^2.0.0",
+    "critters-webpack-plugin": "^3.0.2",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.0",
+    "gulp": "^4.0.2",
+    "lighthouse": "^11.0.0"
+  }
+}
