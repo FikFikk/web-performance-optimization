@@ -122,12 +122,38 @@ node convert-images.js ./your-images-folder
 
 ---
 
+### [JavaScript Code Splitting & Lazy Loading](./techniques/javascript-code-splitting/)
+
+**Impact:** ⭐⭐⭐⭐⭐ (Very High)
+
+Pecah bundle JavaScript besar menjadi chunks kecil yang di-load on-demand, mengurangi initial bundle size hingga 70% dan mempercepat Time to Interactive.
+
+**Key Metrics:**
+- Initial bundle reduction: 40-70%
+- FCP improvement: 30-50%
+- TTI improvement: 35-60%
+- LCP improvement: 25-45%
+- INP improvement: 20-35%
+
+**Isi Lengkap:**
+- ✅ Penjelasan masalah bundle monolithic dan dampaknya
+- ✅ Implementasi route-based, component-based, dan library splitting
+- ✅ Webpack, Next.js, dan Vite configuration
+- ✅ Before/after measurements dengan real data
+- ✅ Tools untuk measuring (Bundle Analyzer, Lighthouse CI, Coverage)
+- ✅ Real-world case studies (Tokopedia, Netflix, Airbnb, Shopify)
+- ✅ Working code examples, configurations, dan measurement scripts
+
+[**Baca Selengkapnya →**](./techniques/javascript-code-splitting/README.md)
+
+---
+
 ## 📈 Roadmap
 
 Teknik yang akan ditambahkan:
-- [ ] Critical CSS Inlining & Code Splitting
-- [ ] Resource Hints (preload, prefetch, preconnect)
-- [ ] JavaScript Bundle Optimization
+- [x] Critical CSS Inlining & Code Splitting
+- [x] Resource Hints (preload, prefetch, preconnect)
+- [x] JavaScript Bundle Optimization
 - [ ] Font Loading Strategies
 - [ ] Lazy Loading & Intersection Observer
 - [ ] Service Workers & Caching Strategies

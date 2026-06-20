@@ -1,0 +1,59 @@
+# Lighthouse CI Configuration
+ci:
+  collect:
+    numberOfRuns: 3
+    url:
+      - 'http://localhost:3000/'
+      - 'http://localhost:3000/dashboard'
+    startServerCommand: 'npm run dev'
+    startServerReadyPattern: 'webpack compiled'
+  
+  assert:
+    preset: 'lighthouse:recommended'
+    assertions:
+      # Performance
+      'first-contentful-paint':
+        - error
+        - maxNumericValue: 2000
+      
+      'largest-contentful-paint':
+        - error
+        - maxNumericValue: 2500
+      
+      'interactive':
+        - error
+        - maxNumericValue: 3500
+      
+      'speed-index':
+        - warn
+        - maxNumericValue: 3000
+      
+      'total-blocking-time':
+        - warn
+        - maxNumericValue: 500
+      
+      # JavaScript specific
+      'bootup-time':
+        - warn
+        - maxNumericValue: 2500
+      
+      'mainthread-work-breakdown':
+        - warn
+        - maxNumericValue: 3000
+      
+      'unused-javascript':
+        - warn
+        - maxNumericValue: 100000
+      
+      # Core Web Vitals
+      'cumulative-layout-shift':
+        - error
+        - maxNumericValue: 0.1
+      
+      # Resource usage
+      'total-byte-weight':
+        - warn
+        - maxNumericValue: 512000
+  
+  upload:
+    target: 'temporary-public-storage'
