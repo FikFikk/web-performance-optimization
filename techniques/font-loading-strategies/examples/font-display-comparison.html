@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>font-display Value Comparison</title>
+  
+  <style>
+    /* Different font-display values for comparison */
+    @font-face {
+      font-family: 'Demo Auto';
+      src: url('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2') format('woff2');
+      font-display: auto;
+    }
+    
+    @font-face {
+      font-family: 'Demo Block';
+      src: url('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2') format('woff2');
+      font-display: block;
+    }
+    
+    @font-face {
+      font-family: 'Demo Swap';
+      src: url('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2') format('woff2');
+      font-display: swap;
+    }
+    
+    @font-face {
+      font-family: 'Demo Fallback';
+      src: url('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2') format('woff2');
+      font-display: fallback;
+    }
+    
+    @font-face {
+      font-family: 'Demo Optional';
+      src: url('https://fonts.gstatic.com/s/inter/v12/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2') format('woff2');
+      font-display: optional;
+    }
+    
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    
+    .demo-box {
+      border: 2px solid #ddd;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    .demo-box h2 {
+      margin-top: 0;
+      color: #0066cc;
+    }
+    
+    .demo-text {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    
+    .auto { font-family: 'Demo Auto', sans-serif; }
+    .block { font-family: 'Demo Block', sans-serif; }
+    .swap { font-family: 'Demo Swap', sans-serif; }
+    .fallback { font-family: 'Demo Fallback', sans-serif; }
+    .optional { font-family: 'Demo Optional', sans-serif; }
+    
+    .behavior {
+      background: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+    
+    .recommended {
+      border-color: #00aa00;
+      background-color: #f0fff0;
+    }
+    
+    .not-recommended {
+      border-color: #cc0000;
+      background-color: #fff5f5;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    
+    th {
+      background-color: #f5f5f5;
+      font-weight: 600;
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .badge-good {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    
+    .badge-bad {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+<body>
+  <h1>font-display Value Comparison</h1>
+  
+  <p>
+    Halaman ini membandingkan berbagai nilai <code>font-display</code> dan 
+    bagaimana masing-masing mempengaruhi rendering text selama font loading.
+  </p>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Value</th>
+        <th>Block Period</th>
+        <th>Swap Period</th>
+        <th>Behavior</th>
+        <th>Best For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>auto</strong></td>
+        <td>~100ms</td>
+        <td>~3s</td>
+        <td>Browser default behavior</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td><strong>block</strong></td>
+        <td>2-3s</td>
+        <td>∞</td>
+        <td>Text invisible until font loads</td>
+        <td>Brand-critical fonts</td>
+      </tr>
+      <tr style="background-color: #f0fff0;">
+        <td><strong>swap</strong> ✅</td>
+        <td>0ms</td>
+        <td>∞</td>
+        <td>Show fallback immediately, swap when ready</td>
+        <td><strong>Most sites (recommended)</strong></td>
+      </tr>
+      <tr>
+        <td><strong>fallback</strong></td>
+        <td>~100ms</td>
+        <td>~3s</td>
+        <td>Brief block, then swap with timeout</td>
+        <td>Balance performance/brand</td>
+      </tr>
+      <tr>
+        <td><strong>optional</strong></td>
+        <td>~100ms</td>
+        <td>0ms</td>
+        <td>Use font only if already cached</td>
+        <td>Performance-critical sites</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="demo-box not-recommended">
+    <h2>font-display: auto <span class="badge badge-bad">Default</span></h2>
+    <p class="demo-text auto">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod 
+      tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+    <div class="behavior">
+      <strong>Behavior:</strong> Browser decides (usually ~100ms block). 
+      Tidak predictable, bisa FOIT atau FOUT tergantung browser.
+    </div>
+  </div>
+  
+  <div class="demo-box not-recommended">
+    <h2>font-display: block <span class="badge badge-bad">FOIT</span></h2>
+    <p class="demo-text block">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod 
+      tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+    <div class="behavior">
+      <strong>Behavior:</strong> Text invisible 2-3 seconds sampai font loaded. 
+      ❌ Poor UX, 53% users abandon after 3s (Google data).
+    </div>
+  </div>
+  
+  <div class="demo-box recommended">
+    <h2>font-display: swap <span class="badge badge-good">Recommended ✅</span></h2>
+    <p class="demo-text swap">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod 
+      tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+    <div class="behavior">
+      <strong>Behavior:</strong> Fallback font shown immediately, swap ke web font 
+      ketika loaded. ✅ Content visible instantly, minimal CLS if fallback matched.
+    </div>
+  </div>
+  
+  <div class="demo-box">
+    <h2>font-display: fallback <span class="badge">Balanced</span></h2>
+    <p class="demo-text fallback">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod 
+      tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+    <div class="behavior">
+      <strong>Behavior:</strong> Brief block (~100ms), lalu show fallback. 
+      Swap hanya jika font loaded dalam ~3s, otherwise stick dengan fallback.
+    </div>
+  </div>
+  
+  <div class="demo-box">
+    <h2>font-display: optional <span class="badge">Performance-first</span></h2>
+    <p class="demo-text optional">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod 
+      tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+    <div class="behavior">
+      <strong>Behavior:</strong> Brief block (~100ms). Jika font tidak loaded 
+      dalam 100ms, gunakan fallback dan <strong>tidak pernah swap</strong>. 
+      Zero CLS, tapi font mungkin tidak muncul di first visit.
+    </div>
+  </div>
+  
+  <h2>Recommendation</h2>
+  <div style="background: #e7f3ff; padding: 20px; border-left: 4px solid #0066cc; margin: 20px 0;">
+    <p style="margin: 0; font-size: 18px;">
+      <strong>Use <code>font-display: swap</code> for 95% of cases.</strong>
+    </p>
+    <p style="margin: 10px 0 0 0;">
+      It provides the best user experience: content visible immediately, 
+      custom font applied when ready, minimal layout shift if fallback matched properly.
+    </p>
+  </div>
+  
+  <script>
+    // Log font loading untuk debugging
+    document.fonts.ready.then(() => {
+      console.log('All fonts loaded');
+      document.fonts.forEach(font => {
+        console.log(`${font.family}: ${font.display}`);
+      });
+    });
+  </script>
+</body>
+</html>

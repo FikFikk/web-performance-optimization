@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optimal Font Loading Example</title>
+  
+  <!-- 1. Preconnect untuk Google Fonts (jika digunakan) -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- 2. Preload critical font (self-hosted) -->
+  <link rel="preload" 
+        href="/fonts/inter-var.woff2" 
+        as="font" 
+        type="font/woff2" 
+        crossorigin="anonymous">
+  
+  <style>
+    /* 3. Inline critical font-face dengan font-display: swap */
+    @font-face {
+      font-family: 'Inter';
+      src: url('/fonts/inter-var.woff2') format('woff2');
+      font-weight: 100 900;
+      font-display: swap; /* Show fallback immediately */
+      font-style: normal;
+    }
+    
+    /* 4. Font stack dengan matched fallback */
+    :root {
+      --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 
+                      'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    body {
+      font-family: var(--font-primary);
+      font-size: 16px;
+      line-height: 1.5;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    
+    h1 {
+      font-weight: 700;
+      font-size: 2.5rem;
+      margin: 0 0 1rem;
+    }
+    
+    h2 {
+      font-weight: 600;
+      font-size: 1.75rem;
+      margin: 2rem 0 1rem;
+    }
+    
+    p {
+      font-weight: 400;
+      margin: 0 0 1rem;
+    }
+    
+    .metrics {
+      background: #f5f5f5;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 2rem 0;
+    }
+    
+    .metric-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 0.5rem 0;
+      font-size: 14px;
+    }
+    
+    .metric-label {
+      font-weight: 600;
+    }
+    
+    .metric-value {
+      font-family: 'Courier New', monospace;
+      color: #0066cc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Optimal Font Loading Strategy</h1>
+  
+  <p>
+    Halaman ini mengimplementasikan best practices untuk font loading:
+    font-display: swap, preload critical fonts, variable fonts, dan
+    fallback yang matched untuk minimize CLS.
+  </p>
+  
+  <h2>Key Features</h2>
+  <ul>
+    <li>✅ <strong>font-display: swap</strong> — No FOIT, instant text visibility</li>
+    <li>✅ <strong>Preloaded font</strong> — Critical font prioritized</li>
+    <li>✅ <strong>Variable font</strong> — Single file for all weights</li>
+    <li>✅ <strong>Self-hosted</strong> — No external DNS lookup</li>
+    <li>✅ <strong>WOFF2 format</strong> — Best compression (95%+ support)</li>
+    <li>✅ <strong>Matched fallback</strong> — Minimal CLS on font swap</li>
+  </ul>
+  
+  <div class="metrics">
+    <h3 style="margin-top: 0;">Font Loading Metrics</h3>
+    <div class="metric-item">
+      <span class="metric-label">Font Display:</span>
+      <span class="metric-value" id="font-display">Checking...</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-label">Fonts Loaded:</span>
+      <span class="metric-value" id="fonts-loaded">Checking...</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-label">Load Time:</span>
+      <span class="metric-value" id="load-time">Checking...</span>
+    </div>
+    <div class="metric-item">
+      <span class="metric-label">Preload Present:</span>
+      <span class="metric-value" id="preload-check">Checking...</span>
+    </div>
+  </div>
+  
+  <h2>Different Font Weights</h2>
+  <p style="font-weight: 300;">This is weight 300 (Light)</p>
+  <p style="font-weight: 400;">This is weight 400 (Regular)</p>
+  <p style="font-weight: 500;">This is weight 500 (Medium)</p>
+  <p style="font-weight: 600;">This is weight 600 (Semibold)</p>
+  <p style="font-weight: 700;">This is weight 700 (Bold)</p>
+  <p style="font-weight: 800;">This is weight 800 (Extrabold)</p>
+  
+  <script>
+    // Measure font loading performance
+    const fontLoadStart = performance.now();
+    
+    document.fonts.ready.then(() => {
+      const loadTime = performance.now() - fontLoadStart;
+      document.getElementById('load-time').textContent = 
+        `${loadTime.toFixed(2)}ms`;
+      
+      // Count loaded fonts
+      const loadedFonts = Array.from(document.fonts.values());
+      document.getElementById('fonts-loaded').textContent = 
+        `${loadedFonts.length} font(s)`;
+      
+      // Check font-display value
+      const inter = loadedFonts.find(f => f.family.includes('Inter'));
+      document.getElementById('font-display').textContent = 
+        inter ? inter.display || 'auto' : 'N/A';
+    });
+    
+    // Check preload
+    const preloads = document.querySelectorAll('link[rel="preload"][as="font"]');
+    document.getElementById('preload-check').textContent = 
+      preloads.length > 0 ? `Yes (${preloads.length})` : 'No';
+  </script>
+</body>
+</html>
