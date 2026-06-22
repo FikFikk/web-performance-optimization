@@ -1,0 +1,22 @@
+{
+  "before": {
+    "totalRequests": 25,
+    "transferredBytes": 1963178,
+    "domContentLoaded": 623,
+    "loadEvent": 6486
+  },
+  "after": {
+    "totalRequests": 3,
+    "transferredBytes": 107421,
+    "domContentLoaded": 161,
+    "loadEvent": 420
+  },
+  "savings": {
+    "requests": 22,
+    "requestsPercent": "88.0%",
+    "bytes": "1812.26 KB",
+    "bytesPercent": "94.5%",
+    "loadTimeImprovement": "6066.00 ms",
+    "loadTimeImprovementPercent": "93.5%"
+  }
+}

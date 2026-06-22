@@ -1,0 +1,26 @@
+{
+  "name": "lazy-loading-intersection-observer",
+  "version": "1.0.0",
+  "description": "Optimasi performance loading asset non-critical (gambar, iframe, komponen) menggunakan Native Lazy Loading dan Intersection Observer API.",
+  "main": "tools/measure-lazy-loading.js",
+  "scripts": {
+    "start": "serve examples",
+    "test": "node tools/measure-lazy-loading.js"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  },
+  "devDependencies": {
+    "puppeteer": "^21.5.0"
+  },
+  "keywords": [
+    "lazy-loading",
+    "intersection-observer",
+    "web-performance",
+    "images",
+    "iframes",
+    "core-web-vitals"
+  ],
+  "author": "Fikri (via Hermes)",
+  "license": "MIT"
+}

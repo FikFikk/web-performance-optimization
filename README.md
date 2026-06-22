@@ -5,6 +5,32 @@ Konten berbasis riset dengan metrik real-world dan implementation guide.
 
 ## 📚 Teknik Optimasi
 
+### [Lazy Loading & Intersection Observer](./techniques/lazy-loading-intersection-observer/)
+
+**Impact:** ⭐⭐⭐⭐⭐ (Very High)
+
+Optimasi loading asset non-critical (gambar, iframe, video) menggunakan Native HTML Lazy Loading dan Intersection Observer API untuk mengurangi initial load bytes hingga 94%.
+
+**Key Metrics:**
+- Initial request reduction: 80-90%
+- Initial page payload reduction: 70-95%
+- Page load time acceleration: 80-95% (up to 6s faster)
+- LCP & FCP improvements: 35-50%
+- Browser support: Native lazy 95%+, Intersection Observer 98%+
+
+**Isi Lengkap:**
+- ✅ Penjelasan masalah bandwidth wasting dan network congestion
+- ✅ Implementasi Native Lazy Loading & Intersection Observer
+- ✅ Pendekatan Dynamic Component Splitting di React/Next.js
+- ✅ Before/after measurements riil dengan data otomatis
+- ✅ Panduan monitoring di DevTools, Lighthouse, & WebPageTest
+- ✅ Studi kasus di Medium, Tokopedia, dan YouTube
+- ✅ Working playground code (before.html & after.html) & metrics logger
+
+[**Baca Selengkapnya →**](./techniques/lazy-loading-intersection-observer/README.md)
+
+---
+
 ### [Resource Hints: Preload, Prefetch, dan Preconnect](./techniques/resource-hints-preload-prefetch/)
 
 **Impact:** ⭐⭐⭐⭐⭐ (Very High)
@@ -177,12 +203,13 @@ Optimasi loading web fonts dengan font-display, preload, subsetting, dan variabl
 
 ## 📈 Roadmap
 
-Teknik yang akan ditambahkan:
+## 📈 Roadmap
+External tools and resources Roadmap:
 - [x] Critical CSS Inlining & Code Splitting
 - [x] Resource Hints (preload, prefetch, preconnect)
 - [x] JavaScript Bundle Optimization
 - [x] Font Loading Strategies
-- [ ] Lazy Loading & Intersection Observer
+- [x] Lazy Loading & Intersection Observer
 - [ ] Service Workers & Caching Strategies
 - [ ] Server-Side Rendering (SSR) vs Static Generation
 - [ ] Database Query Optimization

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Non-Optimized Page (Tanpa Lazy Loading)</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background-color: #0f172a;
+      color: #fff;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .hero {
+      background: #f1f5f9;
+      padding: 3rem 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .hero-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      display: block;
+      margin: 1.5rem auto 0;
+      aspect-ratio: 16/9;
+      background-color: #ddd;
+    }
+    .gallery-item {
+      margin-bottom: 3rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    }
+    .gallery-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 16/9;
+      background-color: #e2e8f0;
+    }
+    .gallery-body {
+      padding: 1.5rem;
+    }
+    .gallery-title {
+      font-size: 1.5rem;
+      margin: 0 0 0.5rem;
+    }
+    iframe {
+      width: 100%;
+      height: 450px;
+      border: 0;
+      margin-top: 1rem;
+      background-color: #e2e8f0;
+    }
+    footer {
+      background: #0f172a;
+      color: #94a3b8;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Studi Kasus: Tanpa Lazy Loading</h1>
+    <p>Semua asset (gambar & iframe) di-load langsung saat initial page load</p>
+  </header>
+
+  <div class="container">
+    <div class="hero">
+      <h2>Hero Section (Above the Fold)</h2>
+      <p>Gambar di bawah ini sejatinya harus segera dirujuk browser (Priority High), namun terkejar oleh puluhan gambar di section footer karena browser mendownload semuanya secara paralel.</p>
+      <!-- Hero image (above the fold) tanpa loading="lazy" -->
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80" alt="Hero Image" class="hero-img">
+    </div>
+
+    <div class="gallery">
+      <h2>Galeri Foto (Below the Fold)</h2>
+      <p>Gambar-gambar ini berada jauh di bawah viewport, namun browser tetap mendownloadnya langsung!</p>
+
+      <!-- 10 Gambar below the fold tanpa lazy loading -->
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop&q=80" alt="Landscape 1" class="gallery-img">
+        <div class="gallery-body">
+          <h3 class="gallery-title">Pemandangan Pegunungan</h3>
+          <p>Ini adalah pemandangan pegunungan yang sangat jauh di bagian bawah halaman.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&auto=format&fit=crop&q=80" alt="Landscape 2" class="gallery-img">
+        <div class="gallery-body">
+          <h3 class="gallery-title">Hutan Rimbun</h3>
+          <p>Hutan hijau alami yang seharusnya tidak di-load sampai user men-scroll ke area ini.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&auto=format&fit=crop&q=80" alt="Landscape 3" class="gallery-img">
+        <div class="gallery-body">
+          <h3 class="gallery-title">Pepohonan Menembus Langit</h3>
+          <p>Mengonsumsi bandwidth dan memblokir request critical lainnya padahal belum terlihat.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1472214222541-d510753a49e9?w=800&auto=format&fit=crop&q=80" alt="Landscape 4" class="gallery-img">
+        <div class="gallery-body">
+          <h3 class="gallery-title">Padang Rumput Asri</h3>
+          <p>Contoh pemborosan kuota data user mobile saat initial load.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&auto=format&fit=crop&q=80" alt="Landscape 5" class="gallery-img">
+        <div class="gallery-body">
+          <h3 class="gallery-title">Lembah Hijau</h3>
+          <p>Meningkatkan total bytes transfer harian secara tidak perlu.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&auto=format&fit=crop&q=80" alt="Landscape 6" class="gallery-img">
+        <div class="gallery-body">
+          <h3 class="gallery-title">Perbukitan Batu</h3>
+          <p>Masih berjarak ribuan pixel dari atas viewport.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=800&auto=format&fit=crop&q=80" alt="Landscape 7" class="gallery-img">
+        <div class="gallery-body">
+          <h3 class="gallery-title">Pantai dan Sunset</h3>
+          <p>Menambah beban load network secara signifikan.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&auto=format&fit=crop&q=80" alt="Landscape 8" class="gallery-img">
+        <div class="gallery-body">
+          <h3 class="gallery-title">Dua Tebing Pantai</h3>
+          <p>Gambar kedelapan pada halaman.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <h2>Komponen Eksternal Berat: Video YouTube Embed (Iframe)</h2>
+        <p>Iframe YouTube memuat belasan script tracking, stylesheets, dan player JavaScript yang ukurannya >500kb.</p>
+        <!-- YouTube embed tanpa lazy loading -->
+        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&auto=format&fit=crop&q=80" alt="Landscape 9" class="gallery-img">
+        <div class="gallery-body">
+          <h3 class="gallery-title">Pantai di Pulau Tropis</h3>
+          <p>Gambar ke-9 berada di dekat akhir dokumen.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?w=800&auto=format&fit=crop&q=80" alt="Landscape 10" class="gallery-img">
+        <div class="gallery-body">
+          <h3 class="gallery-title">Danau di Musim Gugur</h3>
+          <p>Gambar terakhir yang sangat tidak mungkin dilihat user tanpa melakukan scroll terlebih dahulu.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Web Performance Optimization Guide - Hermes Agent</p>
+  </footer>
+
+</body>
+</html>

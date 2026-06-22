@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optimized Page (Menggunakan Lazy Loading & Intersection Observer)</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background-color: #0d9488;
+      color: #fff;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .hero {
+      background: #f1f5f9;
+      padding: 3rem 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    .hero-img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+      display: block;
+      margin: 1.5rem auto 0;
+      aspect-ratio: 16/9;
+      background-color: #ddd;
+    }
+    .gallery-item {
+      margin-bottom: 3rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      background-color: #fff;
+    }
+    .gallery-img-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background-color: #f1f5f9;
+    }
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+    .gallery-img.loaded {
+      opacity: 1;
+    }
+    .gallery-body {
+      padding: 1.5rem;
+    }
+    .gallery-title {
+      font-size: 1.5rem;
+      margin: 0 0 0.5rem;
+    }
+    
+    /* Placeholder / Skeleton style */
+    .skeleton::before {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 200% 100%;
+      animation: loading-skeleton 1.5s infinite;
+    }
+    .skeleton.loaded::before {
+      display: none;
+    }
+    
+    @keyframes loading-skeleton {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    /* Placeholder untuk YouTube Iframe lazy */
+    .video-lazy-container {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #1e293b;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+    .video-play-btn {
+      width: 68px;
+      height: 48px;
+      background-color: rgba(229, 9, 20, 0.9);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      transition: background-color 0.2s;
+    }
+    .video-lazy-container:hover .video-play-btn {
+      background-color: rgb(229, 9, 20);
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    footer {
+      background: #0f172a;
+      color: #94a3b8;
+      text-align: center;
+      padding: 2rem;
+      margin-top: 5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Studi Kasus: Menggunakan Lazy Loading</h1>
+    <p>Hanya memuat gambar & iframe ketika mendekati viewport menggunakan browser native lazy & Intersection Observer</p>
+  </header>
+
+  <div class="container">
+    <div class="hero">
+      <h2>Hero Section (Above the Fold)</h2>
+      <p>Gambar hero ini **penting** untuk LCP. Kita sengaja TIDAK menggunakan lazy loading pada gambar ini agar browser langsung mengunduhnya dengan prioritas tinggi.</p>
+      <!-- Hero image (above the fold) tanpa loading="lazy", menggunakan fetchpriority="high" -->
+      <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80" alt="Hero Image" class="hero-img" fetchpriority="high">
+    </div>
+
+    <div class="gallery">
+      <h2>Galeri Foto (Below the Fold)</h2>
+      <p>Scroll ke bawah untuk melihat transisi smooth fading saat gambar masuk viewport dan di-load secara dinamis!</p>
+
+      <!-- 10 Gambar below the fold menggunakan Modern Lazy Loading + Intersection Observer -->
+      <div class="gallery-item">
+        <div class="gallery-img-container skeleton">
+          <!-- Native lazy loading + JavaScript fallback/fade-in (data-src) -->
+          <img data-src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&auto=format&fit=crop&q=80" alt="Landscape 1" class="gallery-img lazy" loading="lazy">
+        </div>
+        <div class="gallery-body">
+          <h3 class="gallery-title">Pemandangan Pegunungan</h3>
+          <p>Ini adalah pemandangan pegunungan yang sangat jauh di bagian bawah halaman.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-img-container skeleton">
+          <img data-src="https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?w=800&auto=format&fit=crop&q=80" alt="Landscape 2" class="gallery-img lazy" loading="lazy">
+        </div>
+        <div class="gallery-body">
+          <h3 class="gallery-title">Hutan Rimbun</h3>
+          <p>Hutan hijau alami yang dimuat hanya ketika user mendekatinya.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-img-container skeleton">
+          <img data-src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&auto=format&fit=crop&q=80" alt="Landscape 3" class="gallery-img lazy" loading="lazy">
+        </div>
+        <div class="gallery-body">
+          <h3 class="gallery-title">Pepohonan Menembus Langit</h3>
+          <p>Dimuat secara asynchronous, menghemat kuota user yang tidak melakukan scroll sampai sini.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-img-container skeleton">
+          <img data-src="https://images.unsplash.com/photo-1472214222541-d510753a49e9?w=800&auto=format&fit=crop&q=80" alt="Landscape 4" class="gallery-img lazy" loading="lazy">
+        </div>
+        <div class="gallery-body">
+          <h3 class="gallery-title">Padang Rumput Asri</h3>
+          <p>Kompatibel penuh dengan native browser lazy-loading (Chrome, Safari, Edge, Firefox).</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-img-container skeleton">
+          <img data-src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&auto=format&fit=crop&q=80" alt="Landscape 5" class="gallery-img lazy" loading="lazy">
+        </div>
+        <div class="gallery-body">
+          <h3 class="gallery-title">Lembah Hijau</h3>
+          <p>Mengurangi Total Blocking Time karena browser tidak kewalahan me-render banyak element visual.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-img-container skeleton">
+          <img data-src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&auto=format&fit=crop&q=80" alt="Landscape 6" class="gallery-img lazy" loading="lazy">
+        </div>
+        <div class="gallery-body">
+          <h3 class="gallery-title">Perbukitan Batu</h3>
+          <p>Hampir tak terlihat perbedaan visually, namun secara performance jauh lebih optimal.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-img-container skeleton">
+          <img data-src="https://images.unsplash.com/photo-1475924156734-496f6cac6ec1?w=800&auto=format&fit=crop&q=80" alt="Landscape 7" class="gallery-img lazy" loading="lazy">
+        </div>
+        <div class="gallery-body">
+          <h3 class="gallery-title">Pantai dan Sunset</h3>
+          <p>Optimasi tuntas pada level CSS transition dan HTML attributes.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-img-container skeleton">
+          <img data-src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&auto=format&fit=crop&q=80" alt="Landscape 8" class="gallery-img lazy" loading="lazy">
+        </div>
+        <div class="gallery-body">
+          <h3 class="gallery-title">Dua Tebing Pantai</h3>
+          <p>Gambar kedelapan pada halaman.</p>
+        </div>
+      </div>
+
+      <!-- Iframe YouTube non-blocking: Dimuat hanya saat diklik atau saat terdeteksi IntersectionObserver mendekat -->
+      <div class="gallery-item">
+        <h2>Komponen Eksternal Berat: Video YouTube Embed (Lazy Load)</h2>
+        <p>Iframe hanya akan ditambahkan ke DOM ketika kontainer ini didekati (Intersection Observer) atau diklik, menghemat >500 KB payload initial.</p>
+        
+        <div class="video-lazy-container skeleton" id="lazy-youtube" data-src="https://www.youtube.com/embed/dQw4w9WgXcQ">
+          <!-- Tombol play palsu sebagai placeholder visual -->
+          <div class="video-play-btn">▶</div>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-img-container skeleton">
+          <img data-src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800&auto=format&fit=crop&q=80" alt="Landscape 9" class="gallery-img lazy" loading="lazy">
+        </div>
+        <div class="gallery-body">
+          <h3 class="gallery-title">Pantai di Pulau Tropis</h3>
+          <p>Gambar ke-9 berada di dekat akhir dokumen.</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-img-container skeleton">
+          <img data-src="https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?w=800&auto=format&fit=crop&q=80" alt="Landscape 10" class="gallery-img lazy" loading="lazy">
+        </div>
+        <div class="gallery-body">
+          <h3 class="gallery-title">Danau di Musim Gugur</h3>
+          <p>Gambar terakhir yang sangat tidak mungkin dilihat user tanpa melakukan scroll terlebih dahulu.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Web Performance Optimization Guide - Hermes Agent</p>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // 1. Intersection Observer untuk gambar (Fade-in effect & load fallback)
+      const lazyImages = document.querySelectorAll("img.lazy");
+      
+      if ("IntersectionObserver" in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const image = entry.target;
+              // Pindahkan value data-src ke src
+              image.src = image.dataset.src;
+              
+              image.onload = () => {
+                image.classList.add("loaded");
+                image.parentElement.classList.remove("skeleton");
+                image.parentElement.classList.add("loaded");
+              };
+              
+              // Berhenti mengamati jika sudah di-load
+              observer.unobserve(image);
+            }
+          });
+        }, {
+          rootMargin: "0px 0px 300px 0px" // Load gambar 300px sebelum masuk viewport
+        });
+        
+        lazyImages.forEach(image => {
+          imageObserver.observe(image);
+        });
+      } else {
+        // Fallback untuk browser lawas tanpa IntersectionObserver
+        lazyImages.forEach(image => {
+          image.src = image.dataset.src;
+          image.classList.add("loaded");
+          image.parentElement.classList.remove("skeleton");
+        });
+      }
+
+      // 2. Intersection Observer untuk YouTube Iframe
+      const lazyYoutube = document.getElementById("lazy-youtube");
+      
+      if ("IntersectionObserver" in window && lazyYoutube) {
+        const iframeObserver = new IntersectionObserver((entries, observer) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              loadYouTubeIframe(lazyYoutube);
+              observer.unobserve(lazyYoutube);
+            }
+          });
+        }, {
+          rootMargin: "0px 0px 200px 0px"
+        });
+        
+        iframeObserver.observe(lazyYoutube);
+      } else if (lazyYoutube) {
+        // Fallback langsung load
+        loadYouTubeIframe(lazyYoutube);
+      }
+      
+      function loadYouTubeIframe(container) {
+        const src = container.getAttribute("data-src");
+        const iframe = document.createElement("iframe");
+        iframe.setAttribute("src", src);
+        iframe.setAttribute("title", "YouTube video player");
+        iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture");
+        iframe.setAttribute("allowfullscreen", "");
+        
+        // Bersihkan spinner/placeholder lalu masukkan iframe
+        container.innerHTML = "";
+        container.appendChild(iframe);
+        container.classList.remove("skeleton");
+        container.classList.add("loaded");
+      }
+    });
+  </script>
+
+</body>
+</html>
