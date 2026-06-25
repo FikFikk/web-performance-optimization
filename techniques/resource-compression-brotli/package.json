@@ -1,0 +1,24 @@
+{
+  "name": "resource-compression-examples",
+  "version": "1.0.0",
+  "description": "Example configurations for Brotli + Gzip compression",
+  "scripts": {
+    "compress": "bash compress-build.sh dist",
+    "test:compression": "node test-compression.js",
+    "server:express": "node express-server.js",
+    "build:webpack": "webpack",
+    "build:vite": "vite build"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "shrink-ray-current": "^4.1.3"
+  },
+  "devDependencies": {
+    "brotli-webpack-plugin": "^1.1.0",
+    "compression-webpack-plugin": "^10.0.0",
+    "vite": "^4.4.0",
+    "vite-plugin-compression": "^0.5.1",
+    "webpack": "^5.88.0",
+    "webpack-bundle-analyzer": "^4.9.0"
+  }
+}

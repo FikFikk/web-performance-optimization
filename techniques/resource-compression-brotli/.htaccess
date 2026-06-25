@@ -1,0 +1,172 @@
+# Apache Configuration untuk Brotli + Gzip Compression
+# Untuk production deployment dengan .htaccess
+
+# Enable rewrite module
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+</IfModule>
+
+# Brotli Compression (requires mod_brotli)
+# Install: a2enmod brotli
+<IfModule mod_brotli.c>
+    # Enable Brotli compression
+    AddOutputFilterByType BROTLI_COMPRESS \
+        text/html \
+        text/plain \
+        text/xml \
+        text/css \
+        text/javascript \
+        application/javascript \
+        application/x-javascript \
+        application/json \
+        application/xml \
+        application/xml+rss \
+        application/x-font-ttf \
+        application/x-font-opentype \
+        application/vnd.ms-fontobject \
+        font/truetype \
+        font/opentype \
+        font/eot \
+        image/svg+xml \
+        image/x-icon
+    
+    # Compression quality (0-11, higher = better compression, slower)
+    BrotliCompressionQuality 6
+    
+    # Minimum file size to compress (bytes)
+    BrotliFilterNote Input instream
+    BrotliFilterNote Output outstream
+    BrotliFilterNote Ratio ratio
+</IfModule>
+
+# Gzip Compression (fallback, requires mod_deflate)
+<IfModule mod_deflate.c>
+    # Enable Gzip compression
+    AddOutputFilterByType DEFLATE \
+        text/html \
+        text/plain \
+        text/xml \
+        text/css \
+        text/javascript \
+        application/javascript \
+        application/x-javascript \
+        application/json \
+        application/xml \
+        application/xml+rss \
+        application/x-font-ttf \
+        application/x-font-opentype \
+        application/vnd.ms-fontobject \
+        font/truetype \
+        font/opentype \
+        font/eot \
+        image/svg+xml \
+        image/x-icon
+    
+    # Compression level (1-9, higher = better compression, slower)
+    DeflateCompressionLevel 6
+    
+    # Disable for old browsers
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+</IfModule>
+
+# Serve pre-compressed Brotli files (.br)
+<IfModule mod_rewrite.c>
+    # Check if client accepts Brotli
+    RewriteCond %{HTTP:Accept-Encoding} br
+    
+    # Check if .br file exists
+    RewriteCond %{REQUEST_FILENAME}.br -f
+    
+    # Serve .br file instead
+    RewriteRule ^(.*)$ $1.br [L]
+    
+    # Set correct Content-Type for .br files
+    <FilesMatch "\.br$">
+        RewriteRule ^(.*)\.([^.]+)\.br$ - [E=ORIG_EXT:$2]
+        
+        # JavaScript
+        RewriteCond %{ENV:ORIG_EXT} ^js$
+        Header set Content-Type "application/javascript" env=ORIG_EXT
+        
+        # CSS
+        RewriteCond %{ENV:ORIG_EXT} ^css$
+        Header set Content-Type "text/css" env=ORIG_EXT
+        
+        # HTML
+        RewriteCond %{ENV:ORIG_EXT} ^html$
+        Header set Content-Type "text/html" env=ORIG_EXT
+        
+        # JSON
+        RewriteCond %{ENV:ORIG_EXT} ^json$
+        Header set Content-Type "application/json" env=ORIG_EXT
+        
+        # SVG
+        RewriteCond %{ENV:ORIG_EXT} ^svg$
+        Header set Content-Type "image/svg+xml" env=ORIG_EXT
+        
+        # Set encoding header
+        Header set Content-Encoding br
+        Header set Vary Accept-Encoding
+    </FilesMatch>
+</IfModule>
+
+# Serve pre-compressed Gzip files (.gz)
+<IfModule mod_rewrite.c>
+    # Check if client accepts Gzip (and not already served Brotli)
+    RewriteCond %{HTTP:Accept-Encoding} gzip
+    RewriteCond %{REQUEST_FILENAME}.gz -f
+    RewriteCond %{REQUEST_FILENAME}.br !-f
+    RewriteRule ^(.*)$ $1.gz [L]
+    
+    # Set correct Content-Type for .gz files
+    <FilesMatch "\.gz$">
+        # Same pattern as .br files
+        Header set Content-Encoding gzip
+        Header set Vary Accept-Encoding
+    </FilesMatch>
+</IfModule>
+
+# Cache Control for static assets
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Images
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    
+    # CSS and JavaScript
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    
+    # Fonts
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType application/x-font-ttf "access plus 1 year"
+    
+    # HTML (no cache)
+    ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Add Vary header for proper caching
+<IfModule mod_headers.c>
+    Header append Vary Accept-Encoding
+    
+    # Security headers
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Don't compress already-compressed formats
+<IfModule mod_deflate.c>
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|woff2?|mp4|webm)$ no-gzip
+</IfModule>
+
+<IfModule mod_brotli.c>
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|woff2?|mp4|webm)$ no-brotli
+</IfModule>
