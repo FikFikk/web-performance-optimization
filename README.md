@@ -133,6 +133,30 @@ Kompresi resource menggunakan algoritma Brotli dan Gzip untuk mengurangi ukuran 
 
 ---
 
+### [Third-Party Script Optimization](./techniques/third-party-script-optimization/)
+
+**Impact:** ⭐⭐⭐⭐⭐ (Very High)
+
+Optimasi pemuatan script pihak ketiga (analytics, chat widgets, ad trackers, A/B testing) dengan async/defer, facade pattern, Partytown web worker offloading, dan self-hosting proxy untuk menghilangkan blocking main thread dan meningkatkan Core Web Vitals (terutama INP dan TTI).
+
+**Key Metrics:**
+- Total Blocking Time (TBT) reduction: 60-90%
+- Interaction to Next Paint (INP) improvement: 40-70%
+- Time to Interactive (TTI) acceleration: 35-65%
+- Initial JS execution payload reduction: 50-80%
+
+**Isi Lengkap:**
+- ✅ Penjelasan masalah main thread blocking & network contention
+- ✅ Implementasi async/defer, facade pattern, & requestIdleCallback
+- ✅ Next.js Script component & Partytown (Web Workers) integration
+- ✅ Nginx reverse proxy & subdomain caching untuk analytics scripts
+- ✅ Before/after measurements & tools monitoring (DevTools, Lighthouse)
+- ✅ Real-world case studies (Calibre App, Cloudflare, The Economic Times)
+
+[**Baca Selengkapnya →**](./techniques/third-party-script-optimization/README.md)
+
+---
+
 ## 📈 Roadmap
 
 Repository ini dikelola otomatis oleh **Hermes Agent**, yang menjalankan riset harian tentang teknik optimasi web performance dan menghasilkan konten berkualitas tinggi dalam Bahasa Indonesia.
@@ -240,12 +264,12 @@ Teknik yang sudah tersedia:
 - [x] Font Loading Strategies
 - [x] HTTP Caching & Service Worker
 - [x] Resource Compression (Brotli & Gzip)
+- [x] Third-Party Script Optimization
 
 Coming soon:
 - [ ] Server-Side Rendering (SSR) vs Static Generation
 - [ ] Database Query Optimization
 - [ ] CDN Configuration & Edge Computing
-- [ ] Third-Party Script Optimization
 - [ ] HTTP/2 & HTTP/3 Implementation
 
 ---

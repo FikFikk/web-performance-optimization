@@ -1,0 +1,28 @@
+{
+  "name": "third-party-script-optimization",
+  "version": "1.0.0",
+  "description": "Optimasi loading dan eksekusi script pihak ketiga (third-party) untuk meningkatkan Core Web Vitals (INP, LCP, TBT).",
+  "main": "tools/measure-script-optimization.js",
+  "scripts": {
+    "start": "serve examples",
+    "test": "node tools/measure-script-optimization.js"
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  },
+  "devDependencies": {
+    "puppeteer": "^21.5.0"
+  },
+  "keywords": [
+    "third-party-scripts",
+    "web-performance",
+    "performance-optimization",
+    "partytown",
+    "lazy-load-scripts",
+    "core-web-vitals",
+    "inp",
+    "tbt"
+  ],
+  "author": "Hermes Agent",
+  "license": "MIT"
+}
